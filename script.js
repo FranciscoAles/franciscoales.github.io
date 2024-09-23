@@ -33,7 +33,7 @@ class Particle {
             this.explosionSpeed = Math.random() * 10 + 5;
         }
     }
-    
+
     update() {
         if (this.isExplosion) {
             this.x += Math.cos(this.explosionAngle) * this.explosionSpeed;
@@ -49,7 +49,7 @@ class Particle {
             this.size = this.baseSize + Math.sin(this.angle) * 2;
         }
     }
-    
+
     draw() {
         ctx.fillStyle = this.color;
         ctx.beginPath();
@@ -157,3 +157,44 @@ highlights.forEach(highlight => {
         gsap.to(highlight, { backgroundSize: '100% 0.2em', duration: 0.25, ease: 'power1.out' });
     });
 });
+
+function handleOrientation() {
+    const isPortrait = window.innerHeight > window.innerWidth;
+    const h1 = document.querySelector('h1');
+    const info = document.querySelector('.info');
+    const canvas = document.getElementById('animation-canvas');
+
+    if (isPortrait) {
+        // Hide the h1 (name) and canvas (grey background)
+        h1.style.display = 'none';
+        canvas.style.display = 'none';
+        
+        // Show the info content immediately
+        info.style.opacity = '1';
+        
+        // Set the body background to a light color
+        document.body.style.background = '#f0f0f0';
+        
+        // Disable the hover interaction
+        document.body.removeEventListener('mouseenter', handleInteraction);
+        document.body.removeEventListener('touchstart', handleInteraction);
+    } else {
+        // Show the h1 and canvas for landscape mode
+        h1.style.display = 'block';
+        canvas.style.display = 'block';
+        h1.style.opacity = '1';
+        
+        // Reset the info content to be hidden initially
+        info.style.opacity = '0';
+        
+        // Reset the body background
+        document.body.style.background = '#d0d0d0';
+        
+        // Re-enable the hover interaction
+        document.body.addEventListener('mouseenter', () => handleInteraction(true));
+        document.body.addEventListener('touchstart', () => handleInteraction(true));
+    }
+}
+
+window.addEventListener('load', handleOrientation);
+window.addEventListener('resize', handleOrientation);
